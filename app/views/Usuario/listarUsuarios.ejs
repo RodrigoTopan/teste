@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html> 
+<head>
+   <!-- bootstrap - link cdn -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- incluindo css -->
+  
+  <title>Listar Usuários</title>
+  <meta charset="UTF-8">
+      <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
+  
+    <script>
+      $(document).ready(function(){
+
+            function carrega_postagens(){
+
+             var xhr = new XMLHttpRequest();
+             xhr.open("GET", "https://amigocat.herokuapp.com/usuario", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify()); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                    //data.length
+                  for(i = 0; i < data.length; i++){
+
+                    $('#container_timeline').append(
+                    '<div class="publicacao">'+
+                    '<div class="panel panel-default">'+
+                    '<center><b><div class="panel-heading"><h4>'+data[i].id+'</h4></div></b></center>'+
+                    '</div>'+
+                      //'<img src="http://localhost:8080/imagens/'+data[i].foto +'" />'+
+                      '<div class="jumbotron">'+
+                        '<h4  id="descricaoProduto"><b>'+data[i].nome+'</b></h4> <hr>'+
+                        '<h5  id="precoProduto"> <b>Username:</b> '+data[i].username+'</h5> <hr>'+
+                        '<h5  id="dataInicio"> <b>Endereço:</b> '+data[i].localizacao+'</h5><hr> '+
+                        '<h5  id="dataFim"> <b>Telefone:</b> '+data[i].telefone+'</h5><hr>'+
+                        '<h5  id="dataFim"> <b>Celular:</b> '+data[i].celular+'</h5><hr>'+
+                        '<h5  id="dataFim"> <b>Email:</b> '+data[i].email+'</h5><hr>'+
+                        '<h5  id="dataFim"> <b>Foto:</b> '+data[i].foto+'</h5><hr>'+
+                        '<center><div class="col-md-6"><button class="btn-alterar btn btn-outline-primary my-2 my-sm-0">Alterar</button></div> </center>'+
+                        '<center><div class="col-md-6"><button class="btn-excluir btn btn-outline-primary my-2 my-sm-0" value="'+data[i].id+'">Excluir</button></div> </center>'+
+                      '</div>'+
+                  '</div>'  
+                    );
+                }  
+              }
+              //xhr.send();
+            $('.btn-alterar').click(function(){
+                $('#container_timeline').hide();
+                $('#container_form_alterar').show();
+              });                       
+            
+              $('.btn-excluir').click(function(){
+                var id = this.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'https://amigocat.herokuapp.com/usuario/'+id);
+                
+                xhr.onload = function(){
+                  if(xhr.status === 200){
+                    console.log('apagado');
+                  }
+                }
+
+                xhr.send();
+
+              });        
+            }
+
+
+        $('#btn_incluir').click(function(){
+          $('#container_timeline').hide();
+          $('#container_form').show();
+        });
+
+        $('#btn-cancelar-publicacao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form').hide();
+          return false;
+        });
+
+        $('#btn-cancelar-alteracao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form_alterar').hide();
+          return false;
+        }); 
+        
+        $('#btn-publicar').click(function(){ 
+        const params = {
+            nome: document.querySelector('#nome').value || 'nome',
+            username: document.querySelector('#login').value || 'login',
+            password: document.querySelector('#senha').value || 'senha',
+            localizacao: document.querySelector('#endereço').value || 'endereço',
+            telefone: document.querySelector('#telefone').value || 'telefone',
+            celular: document.querySelector('#celular').value || 'celular',
+            email: document.querySelector('#email').value || 'email',
+            foto: document.querySelector('#myFileprof').value || 'myFileprof'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("POST", "https://amigocat.herokuapp.com/usuario", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+
+        $('#btn-alterar-usuario').click(function(){ 
+        const id = document.querySelector('#idAnuncioA').value || '1';
+        const params = {
+            nome: document.querySelector('#nomeA').value || 'nomeA',
+            username: document.querySelector('#loginA').value || 'loginA',
+            password: document.querySelector('#senhaA').value || 'senhaA',
+            localizacao: document.querySelector('#endereçoA').value || 'endereçoA',
+            telefone: document.querySelector('#telefoneA').value || 'telefoneA',
+            celular: document.querySelector('#celularA').value || 'celularA',
+            email: document.querySelector('#emailA').value || 'emailA',
+            foto: document.querySelector('#myFileprofA').value || 'myFileprofA'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("PUT", "https://amigocat.herokuapp.com/usuario/"+id);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+    
+
+        }
+        carrega_postagens();
+      });
+
+      </script> 
+</head>
+<body style="background-color: #dedede;">
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="container-fluid">
+            <H1 alt="AMIGOCAT" class="logo2">AMIGOCAT</H1>
+            <a href="#"  alt="Incluir" class="pull-right" id="btn_incluir"><h2>Cadastrar Usuário</H2> </a>           
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="display:none" id="container_form">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Cadastrar Usuário</h4></div>'
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="nome" id="nome" class="form-control" placeholder="Nome Usuário">
+        </div>
+        <div class="form-group">
+          <input type="text" name="login" id="login" class="form-control" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="senha" id="senha" class="form-control" placeholder="Password" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="endereço" id="endereço" class="form-control" placeholder="Endereço" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="telefone" id="telefone" class="form-control" placeholder="Telefone" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="celular" id="celular" class="form-control" placeholder="Celular" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" id="email" class="form-control" placeholder="Email" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="myFileprof" id="myFileprof" class="form-control" placeholder="Foto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-publicar">Publicar</button>
+          <button class="btn btn-danger" id="btn-cancelar-publicacao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<div class="container" style="display:none" id="container_form_alterar">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Alterar um Anúncio</h4></div>
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="idAnuncioA" id="idAnuncioA" class="form-control" placeholder="ID">
+        </div>
+        <div class="form-group">
+          <input type="text" name="nomeA" id="nomeA" class="form-control" placeholder="Nome Usuário">
+        </div>
+        <div class="form-group">
+          <input type="text" name="loginA" id="loginA" class="form-control" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="senhaA" id="senhaA" class="form-control" placeholder="Password" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="endereçoA" id="endereçoA" class="form-control" placeholder="Endereço" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="telefoneA" id="telefoneA" class="form-control" placeholder="Telefone" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="celularA" id="celularA" class="form-control" placeholder="Celular" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="email" name="emailA" id="emailA" class="form-control" placeholder="Email" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="myFileprofA" id="myFileprofA" class="form-control" placeholder="Foto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-alterar-usuario">Alterar</button>
+          <button class="btn btn-danger" id="btn-cancelar-alteracao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+    <div class="container">
+      <div class="col-md-2"></div>
+      <div class="col-md-8" id="container_timeline"></div>
+    </div>
+  </body>
+</html>

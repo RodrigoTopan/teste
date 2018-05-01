@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <!-- bootstrap - link cdn -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- incluindo css -->
+  <link href="../../public/css/style.css" rel="stylesheet">  
+  <title>Listagem de Chamados</title>
+  <meta charset="UTF-8">
+      <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
+      <script>
+      $(document).ready(function(){
+
+            function carrega_postagens(){
+
+             var xhr = new XMLHttpRequest();
+             xhr.open("GET", "https://amigocat.herokuapp.com/chamado", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify()); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                    //data.length
+                  for(i = 0; i < data.length; i++){
+
+                    $('#container_timeline').append(
+                    '<div class="publicacao">'+
+                    '<div class="panel panel-default">'+
+                    '<div class="panel-heading"><h4>'+data[i].id+'</h4></div>'+
+                    '</div>'+
+                      //'<img src="http://localhost:8080/imagens/'+data[i].foto +'" />'+
+                      '<div class="jumbotron">'+
+                        '<h4  id="nomeChamado"> ' +data[i].titulo+'</h4>'+
+                        '<h5  id="myFileprof"> Foto Produto: '+data[i].foto+'</h5>'+
+                        '<h5  id="descricaoChamado"> Descrição: '+data[i].descricao+'</h5>'+
+                        '<h5  id="inicioChamado"> Inicio Chamado: '+data[i].dataInicio+'</h5>'+
+                        '<h5  id="fimChamado"> Fim Chamado: ' +data[i].dataFim+ '</h5><hr>'+
+                        '<h5  id="statusChamado"> Status Chamado: ' +data[i].status+'</h5><hr>'+
+                        '<div class="col-md-6"><button class="btn-alterar btn btn-outline-primary my-2 my-sm-0">Alterar</button></div>'+
+                        '<div class="col-md-6"><button class="btn-excluir btn btn-outline-primary my-2 my-sm-0" value="'+data[i].id+'">Excluir</button></div>'+
+                      '</div>'+
+                  '</div>'  
+                    );
+                }  
+              }
+              //xhr.send();
+            $('.btn-alterar').click(function(){
+                $('#container_timeline').hide();
+                $('#container_form_alterar').show();
+              });                       
+            
+              $('.btn-excluir').click(function(){
+                var id = this.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'https://amigocat.herokuapp.com/chamado/'+id);
+                
+                xhr.onload = function(){
+                  if(xhr.status === 200){
+                    console.log('apagado');
+                  }
+                }
+
+                xhr.send();
+
+              });        
+            }
+
+
+        $('#btn_incluir').click(function(){
+          $('#container_timeline').hide();
+          $('#container_form').show();
+        });
+
+        $('#btn-cancelar-publicacao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form').hide();
+          return false;
+        });
+
+        $('#btn-cancelar-alteracao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form_alterar').hide();
+          return false;
+        }); 
+        
+        $('#btn-publicar').click(function(){ 
+         const params = {
+            titulo: document.querySelector('#tituloChamadoP').value,
+            foto: document.querySelector('#fotoChamadoP').value,
+            descricao: document.querySelector('#descricaoChamadoP').value,
+            dataInicio: document.querySelector('#dataInicioChamadoP').value,
+            dataFim: document.querySelector('#dataFimChamadoP').value,
+            status: document.querySelector('#statusChamadoP').value
+          }  
+         var xhr = new XMLHttpRequest();
+             xhr.open("POST", "https://amigocat.herokuapp.com/chamado", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+
+        $('#btn-alterar-anuncio').click(function(){ 
+        const id = document.querySelector('#idChamadoA').value || '1';
+         const params = {
+            titulo: document.querySelector('#tituloChamadoA').value || 'titulo',
+            foto: document.querySelector('#fotoChamadoA').value || 'foto',
+            descricao: document.querySelector('#descricaoChamadoA').value || 'descricao',
+            dataInicio: document.querySelector('#dataInicioChamadoA').value || 'dataInicio',
+            dataFim: document.querySelector('#dataFimChamadoA').value || 'dataFim',
+            status: document.querySelector('#statusChamadoA').value || 'Status'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("PUT", "https://amigocat.herokuapp.com/chamado/"+id);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+    
+        }
+        carrega_postagens();
+      });
+
+      </script>
+  
+</head>
+<body style="background-color: #dedede;">
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="container-fluid">
+            <H1 alt="AMIGOCAT" class="logo2">AMIGOCAT</H1>
+            <H2 alt="Incluir" class="pull-right" id="btn_incluir">Anunciar</H2>            
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="display:none" id="container_form">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Cadastrar um Chamado</h4></div>
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="tituloChamadoP" id="tituloChamadoP" class="form-control" placeholder="Titulo">
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="fotoChamadoP" id="fotoChamadoP" class="form-control" placeholder="Foto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="descricaoChamadoP" id="descricaoChamadoP" class="form-control" placeholder="Descrição do chamado" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="dataInicioChamadoP" id="dataInicioChamadoP" class="form-control" placeholder="Data Inicio" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="date" name="dataFimChamadoP" id="dataFimChamadoP" class="form-control" placeholder="Data Fim" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="statusChamadoP" id="statusChamadoP" class="form-control" placeholder="Status" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-publicar">Publicar</button>
+          <button class="btn btn-danger" id="btn-cancelar-publicacao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<div class="container" style="display:none" id="container_form_alterar">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Alterar um Anúncio</h4></div>
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="idChamadoA" id="idChamadoA" class="form-control" placeholder="ID">
+        </div> 
+        <div class="form-group">
+          <input type="text" name="tituloChamadoA" id="tituloChamadoA" class="form-control" placeholder="Titulo">
+        </div>
+        <div class="form-group">
+          <input type="text" name="fotoChamadoA" id="fotoChamadoA" class="form-control" placeholder="Foto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="descricaoChamadoA" id="descricaoChamadoA" class="form-control" placeholder="Descrição do chamado" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="date" name="dataInicioChamadoA" id="dataInicioChamadoA" class="form-control" placeholder="Data Inicio" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="date" name="dataFimChamadoA" id="dataFimChamadoA" class="form-control" placeholder="Data Fim" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="statusChamadoA" id="statusChamadoA" class="form-control" placeholder="Status" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-alterar-anuncio">Alterar</button>
+          <button class="btn btn-danger" id="btn-cancelar-alteracao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+    <div class="container">
+      <div class="col-md-2"></div>
+      <div class="col-md-8" id="container_timeline"></div>
+    </div>
+  </body>
+</html>

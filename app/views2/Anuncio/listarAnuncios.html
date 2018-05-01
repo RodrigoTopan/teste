@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <!-- bootstrap - link cdn -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- incluindo css -->
+  <link href="../../public/css/style.css" rel="stylesheet">  
+  <title>Cadastro de Anúncio</title>
+  <meta charset="UTF-8">
+      <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
+  
+    <script>
+      $(document).ready(function(){
+
+            function carrega_postagens(){
+
+             var xhr = new XMLHttpRequest();
+             xhr.open("GET", "https://amigocat.herokuapp.com/anuncio", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify()); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                    //data.length
+                  for(i = 0; i < data.length; i++){
+
+                    $('#container_timeline').append(
+                    '<div class="publicacao">'+
+                    '<div class="panel panel-default">'+
+                    '<div class="panel-heading"><h4>'+data[i].id+'</h4></div>'+
+                    '</div>'+
+                      //'<img src="http://localhost:8080/imagens/'+data[i].foto +'" />'+
+                      '<div class="jumbotron">'+
+                        '<h4  id="descricaoProduto">'+data[i].descricao+'</h4>'+
+                        '<h5  id="precoProduto"> Preço:'+data[i].preco+'</h5>'+
+                        '<h5  id="dataInicio"> Dt. Publicação: '+data[i].dataInicio+'</h5>'+
+                        '<h5  id="dataFim"> Dt. Fim Anúncio'+data[i].dataFim+'</h5><hr>'+
+                        '<div class="col-md-6"><button class="btn-alterar btn btn-outline-primary my-2 my-sm-0">Alterar</button></div>'+
+                        '<div class="col-md-6"><button class="btn-excluir btn btn-outline-primary my-2 my-sm-0" value="'+data[i].id+'">Excluir</button></div>'+
+                      '</div>'+
+                  '</div>'  
+                    );
+                }  
+              }
+              //xhr.send();
+            $('.btn-alterar').click(function(){
+                $('#container_timeline').hide();
+                $('#container_form_alterar').show();
+              });                       
+            
+              $('.btn-excluir').click(function(){
+                var id = this.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'https://amigocat.herokuapp.com/anuncio/'+id);
+                
+                xhr.onload = function(){
+                  if(xhr.status === 200){
+                    console.log('apagado');
+                  }
+                }
+
+                xhr.send();
+
+              });        
+            }
+
+
+        $('#btn_incluir').click(function(){
+          $('#container_timeline').hide();
+          $('#container_form').show();
+        });
+
+        $('#btn-cancelar-publicacao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form').hide();
+          return false;
+        });
+
+        $('#btn-cancelar-alteracao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form_alterar').hide();
+          return false;
+        }); 
+        
+        $('#btn-publicar').click(function(){ 
+        const params = {
+            foto: document.querySelector('#fotoProduto').value || 'foto',
+            descricao: document.querySelector('#descricaoProduto').value || 'descricao',
+            preco: document.querySelector('#precoProduto').value || 'preco',
+            dataInicio: document.querySelector('#dataInicio').value || 'dataInicio',
+            dataFim: document.querySelector('#dataFim').value || 'dataFim'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("POST", "https://amigocat.herokuapp.com/anuncio", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+
+        $('#btn-alterar-anuncio').click(function(){ 
+        const id = document.querySelector('#idAnuncioA').value || '1';
+        const params = {
+            foto: document.querySelector('#fotoProdutoA').value || 'foto',
+            descricao: document.querySelector('#descricaoProdutoA').value || 'descricao',
+            preco: document.querySelector('#precoProdutoA').value || 'preco',
+            dataInicio: document.querySelector('#dataInicioA').value || 'dataInicio',
+            dataFim: document.querySelector('#dataFimA').value || 'dataFim'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("PUT", "https://amigocat.herokuapp.com/anuncio/"+id);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+    
+
+        }
+        carrega_postagens();
+      });
+
+      </script> 
+</head>
+<body style="background-color: #dedede;">
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="container-fluid">
+            <H1 alt="AMIGOCAT" class="logo2">AMIGOCAT</H1>
+            <H2 alt="Incluir" class="pull-right" id="btn_incluir">Anunciar</H2>            
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="col-md-2"></div>
+      <div class="col-md-8" id="container_timeline"></div>
+      
+    </div>
+
+
+    <div class="container" style="display:none" id="container_form">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Publicar um Anúncio</h4></div>
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="fotoProduto" id="fotoProduto" class="form-control" placeholder="Foto">
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="nomeProduto" id="nomeProduto" class="form-control" placeholder="Nome do Produto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="descricaoProduto" id="descricaoProduto" class="form-control" placeholder="Descrição do Produto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="precoProduto" id="precoProduto" class="form-control" placeholder="Preço do Produto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="agricultor" id="agricultor" class="form-control" placeholder="Agricultor" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="date" name="dataInicio" id="dataInicio" class="form-control" placeholder="Data Inicio" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="date" name="dataFim" id="dataFim" class="form-control" placeholder="Data Fim" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-publicar">Publicar</button>
+          <button class="btn btn-danger" id="btn-cancelar-publicacao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<div class="container" style="display:none" id="container_form_alterar">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Alterar um Anúncio</h4></div>
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="idAnuncioA" id="idAnuncioA" class="form-control" placeholder="ID">
+        </div> 
+        <div class="form-group">
+          <input type="text" name="fotoProdutoA" id="fotoProdutoA" class="form-control" placeholder="Foto">
+        </div>
+        <div class="form-group">
+          <input type="text" name="nomeProdutoA" id="nomeProdutoA" class="form-control" placeholder="Nome do Produto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="descricaoProdutoA" id="descricaoProdutoA" class="form-control" placeholder="Descrição do Produto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="precoProdutoA" id="precoProdutoA" class="form-control" placeholder="Preço do Produto" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="agricultorA" id="agricultorA" class="form-control" placeholder="Agricultor" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="date" name="dataInicioA" id="dataInicioA" class="form-control" placeholder="Data Inicio" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="date" name="dataFimA" id="dataFimA" class="form-control" placeholder="Data Fim" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-alterar-anuncio">Alterar</button>
+          <button class="btn btn-danger" id="btn-cancelar-alteracao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+  </body>
+</html>

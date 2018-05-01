@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <!-- bootstrap - link cdn -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- incluindo css -->
+  <link href="../../public/css/style.css" rel="stylesheet">  
+  <title>Listagem de Produtos</title>
+  <meta charset="UTF-8">
+      <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
+  
+
+ <script>
+      $(document).ready(function(){
+
+            function carrega_postagens(){
+
+             var xhr = new XMLHttpRequest();
+             xhr.open("GET", "https://amigocat.herokuapp.com/produto", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify()); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                    //data.length
+                  for(i = 0; i < data.length; i++){
+
+                    $('#container_timeline').append(
+                    '<div class="publicacao">'+
+                    '<div class="panel panel-default">'+
+                    '<div class="panel-heading"><h4>'+data[i].id+'</h4></div>'+
+                    '</div>'+
+                      //'<img src="http://localhost:8080/imagens/'+data[i].foto +'" />'+
+                      '<div class="jumbotron">'+
+                        '<h4  id="nome">'+data[i].nome+'</h4>'+
+                        '<h5  id="categoriaProduto"> Tipo de produto: '+data[i].tipo+'</h5>'+
+                        '<h5  id="duracaoProduto"> Duração Produto: '+data[i].duracao+'</h5>'+
+                        '<h5  id="valorMin"> Valor Min. '+data[i].valorMin+'</h5><hr>'+
+                        '<h5  id="valorMax"> Valor Max. '+data[i].valorMax+'</h5><hr>'+
+                        '<div class="col-md-6"><button class="btn-alterar btn btn-outline-primary my-2 my-sm-0">Alterar</button></div>'+
+                        '<div class="col-md-6"><button class="btn-excluir btn btn-outline-primary my-2 my-sm-0" value="'+data[i].id+'">Excluir</button></div>'+
+                      '</div>'+
+                  '</div>'  
+                    );
+                }  
+              }
+              //xhr.send();
+            $('.btn-alterar').click(function(){
+                $('#container_timeline').hide();
+                $('#container_form_alterar').show();
+              });                       
+            
+              $('.btn-excluir').click(function(){
+                var id = this.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'https://amigocat.herokuapp.com/produto/'+id);
+                
+                xhr.onload = function(){
+                  if(xhr.status === 200){
+                    console.log('apagado');
+                  }
+                }
+
+                xhr.send();
+
+              });        
+            }
+
+
+        $('#btn_incluir').click(function(){
+          $('#container_timeline').hide();
+          $('#container_form').show();
+        });
+
+        $('#btn-cancelar-publicacao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form').hide();
+          return false;
+        });
+
+        $('#btn-cancelar-alteracao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form_alterar').hide();
+          return false;
+        }); 
+        
+        $('#btn-publicar').click(function(){ 
+          
+        const params = {
+            nome: document.querySelector('#nomeP').value || 'nome',
+            tipo: document.querySelector('#tipoP').value || 'tipo',
+            duracao: document.querySelector('#duracaoP').value || 'duracao',
+            valorMin: document.querySelector('#valorMinP').value || 'valorMin',
+            valorMax: document.querySelector('#valorMaxP').value || 'valorMax'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("POST", "https://amigocat.herokuapp.com/produto", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+
+        $('#btn-alterar-anuncio').click(function(){ 
+        const id = document.querySelector('#idA').value || '1';
+        const params = {
+            nome: document.querySelector('#nomeA').value || 'nome',
+            tipo: document.querySelector('#tipoA').value || 'tipo',
+            duracao: document.querySelector('#duracaoA').value || 'duracao',
+            valorMin: document.querySelector('#valorMinA').value || 'valorMin',
+            valorMax: document.querySelector('#valorMaxA').value || 'valorMax'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("PUT", "https://amigocat.herokuapp.com/produto/"+id);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+    
+
+        }
+        carrega_postagens();
+      });
+
+      </script> 
+
+
+</head>
+<body style="background-color: #dedede;">
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="container-fluid">
+            <H1 alt="AMIGOCAT" class="logo2">AMIGOCAT - Produtos</H1>
+            <H2 alt="Incluir" class="pull-right" id="btn_incluir">Cadastrar</H2>            
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="display:none" id="container_form">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Cadastrar Produto</h4></div>
+
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="nomeP" id="nomeP" class="form-control" placeholder="Nome">
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="tipoP" id="tipoP" class="form-control" placeholder="Tipo" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="duracaoP" id="duracaoP" class="form-control" placeholder="Duração" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="valorMinP" id="valorMinP" class="form-control" placeholder="Valor Min" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="valorMaxP" id="valorMaxP" class="form-control" placeholder="Valor Max" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-publicar">Publicar</button>
+          <button class="btn btn-danger" id="btn-cancelar-publicacao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+
+
+<div class="container" style="display:none" id="container_form_alterar">
+      <div class="panel panel-default">
+         
+      <div class="panel-heading"><h4>Alterar um Produto</h4></div>
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="idA" id="idA" class="form-control" placeholder="ID">
+        </div> 
+        <div class="form-group">
+          <input type="text" name="nomeA" id="nomeA" class="form-control" placeholder="Nome">
+        </div>
+        <div class="form-group">
+          <input type="text" name="tipoA" id="tipoA" class="form-control" placeholder="Tipo" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="duracaoA" id="duracaoA" class="form-control" placeholder="Duração" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="valorMinA" id="valorMinA" class="form-control" placeholder="Valor Min" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="valorMaxA" id="valorMaxA" class="form-control" placeholder="Valor Max" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-alterar-anuncio">Alterar</button>
+          <button class="btn btn-danger" id="btn-cancelar-alteracao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+    <div class="container">
+      <div class="col-md-2"></div>
+      <div class="col-md-8" id="container_timeline"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <!-- bootstrap - link cdn -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- incluindo css -->
+  <link href="../../public/css/style.css" rel="stylesheet">  
+  <title>Listagem de Consultores</title>
+  <meta charset="UTF-8">
+      <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
+  
+
+
+<script>
+      $(document).ready(function(){
+
+            function carrega_postagens(){
+
+             var xhr = new XMLHttpRequest();
+             xhr.open("GET", "https://amigocat.herokuapp.com/consultor", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify()); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                    //data.length
+                  for(i = 0; i < data.length; i++){
+
+                    $('#container_timeline').append(
+                    '<div class="publicacao">'+
+                    '<div class="panel panel-default">'+
+                    '<div class="panel-heading"><h4>'+data[i].id+'</h4></div>'+
+                    '</div>'+
+                      //'<img src="http://localhost:8080/imagens/'+data[i].foto +'" />'+
+                      '<div class="jumbotron">'+
+                        '<h4  id="nomeConsultor">'+data[i].nome+'</h4>'+
+                        '<h5  id="loginConsultor"> Username:'+data[i].username+'</h5>'+
+                        '<h5  id="endereço"> Endereço: '+data[i].localizacao+'</h5>'+
+                        '<h5  id="telefone"> Telefone:'+data[i].telefone+'</h5><hr>'+
+                        '<h5  id="celular"> Celular:'+data[i].celular+'</h5><hr>'+
+                        '<h5  id="email"> Email:'+data[i].email+'</h5><hr>'+
+                        '<h5  id="myFileprof"> Foto:'+data[i].foto+'</h5><hr>'+
+                        '<h5  id="RG"> RG:'+data[i].RG+'</h5><hr>'+
+                        '<h5  id="CPF"> CPF:'+data[i].CPF+'</h5><hr>'+
+                        '<h5  id="Especialidade"> Especialidade:'+data[i].especialidade+'</h5><hr>'+
+                        '<div class="col-md-6"><button class="btn-alterar btn btn-outline-primary my-2 my-sm-0">Alterar</button></div>'+
+                        '<div class="col-md-6"><button class="btn-excluir btn btn-outline-primary my-2 my-sm-0" value="'+data[i].id+'">Excluir</button></div>'+
+                      '</div>'+
+                  '</div>'  
+                    );
+                }  
+              }
+              //xhr.send();
+            $('.btn-alterar').click(function(){
+                $('#container_timeline').hide();
+                $('#container_form_alterar').show();
+              });                       
+            
+              $('.btn-excluir').click(function(){
+                var id = this.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'https://amigocat.herokuapp.com/consultor/'+id);
+                
+                xhr.onload = function(){
+                  if(xhr.status === 200){
+                    console.log('apagado');
+                  }
+                }
+
+                xhr.send();
+
+              });        
+            }
+
+
+        $('#btn_incluir').click(function(){
+          $('#container_timeline').hide();
+          $('#container_form').show();
+        });
+
+        $('#btn-cancelar-publicacao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form').hide();
+          return false;
+        });
+
+        $('#btn-cancelar-alteracao').click(function(){
+          $('#container_timeline').show();
+          $('#container_form_alterar').hide();
+          return false;
+        }); 
+        
+        $('#btn-publicar').click(function(){ 
+        const params = {
+            nome: document.querySelector('#nomeConsultorP').value || 'nome',
+            username: document.querySelector('#usernameConsultorP').value || 'username',
+            password: document.querySelector('#passwordConsultorP').value || 'password',
+            localizacao: document.querySelector('#localizacaoConsultorP').value || 'localizacao',
+            telefone: document.querySelector('#telefoneConsultorP').value || 'telefone',
+            celular: document.querySelector('#celularConsultorP').value || 'Celular',
+            email: document.querySelector('#emailConsultorP').value || 'email',
+            foto: document.querySelector('#fotoConsultorP').value || 'FOTO',
+            rg: document.querySelector('#rgConsultorP').value || 'RG',
+            cpf: document.querySelector('#cpfConsultorP').value || 'CPF',
+            especialidade: document.querySelector('#especialidadeConsultorP').value || 'Especialidade'
+          }   
+         var xhr = new XMLHttpRequest();
+             xhr.open("POST", "https://amigocat.herokuapp.com/consultor", true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+
+        $('#btn-alterar-anuncio').click(function(){ 
+        const id = document.querySelector('#idA').value || '1';
+        const params = {
+            nome: document.querySelector('#nomeConsultorA').value || 'nome',
+            username: document.querySelector('#usernameConsultorA').value || 'username',
+            password: document.querySelector('#passwordConsultorA').value || 'password',
+            localizacao: document.querySelector('#localizacaoConsultorA').value || 'localizacao',
+            telefone: document.querySelector('#telefoneConsultorA').value || 'telefone',
+            celular: document.querySelector('#celularConsultorA').value || 'Celular',
+            email: document.querySelector('#emailConsultorA').value || 'email',
+            foto: document.querySelector('#fotoConsultorA').value || 'FOTO',
+            rg: document.querySelector('#rgConsultorA').value || 'RG',
+            cpf: document.querySelector('#cpfConsultorA').value || 'CPF',
+            especialidade: document.querySelector('#especialidadeConsultorA').value || 'Especialidade'
+          }  
+         var xhr = new XMLHttpRequest();
+             xhr.open("PUT", "https://amigocat.herokuapp.com/consultor/"+id);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+             xhr.setRequestHeader('Accept', 'application/json');
+             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+             xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+             xhr.send(JSON.stringify(params)); 
+             xhr.onload = function(){
+                 if(xhr.status === 200){
+                    var data = $.parseJSON(xhr.responseText);
+                    console.log(data);
+                 }
+              }        
+        });
+    
+
+        }
+        carrega_postagens();
+      });
+
+      </script> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body style="background-color: #dedede;">
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="container-fluid">
+            <H1 alt="AMIGOCAT" class="logo2">AMIGOCAT - Consultor</H1>
+            <H2 alt="Incluir" class="pull-right" id="btn_incluir">Anunciar</H2>            
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="col-md-2"></div>
+      <div class="col-md-8" id="container_timeline"></div>
+      
+    </div>
+
+
+    <div class="container" style="display:none" id="container_form">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Cadastrar Consultor</h4></div>
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="nomeConsultorP" id="nomeConsultorP" class="form-control" placeholder="Nome">
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="usernameConsultorP" id="usernameConsultorP" class="form-control" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="passwordConsultorP" id="passwordConsultorP" class="form-control" placeholder="Password" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="localizacaoConsultorP" id="localizacaoConsultorP" class="form-control" placeholder="Endereço" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="telefoneConsultorP" id="telefoneConsultorP" class="form-control" placeholder="Telefone" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="celularConsultorP" id="celularConsultorP" class="form-control" placeholder="CELULAR" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="emailConsultorP" id="emailConsultorP" class="form-control" placeholder="EMAIL" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="fotoConsultorP" id="fotoConsultorP" class="form-control" placeholder="FOTO" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="rgConsultorP" id="rgConsultorP" class="form-control" placeholder="RG" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="cpfConsultorP" id="cpfConsultorP" class="form-control" placeholder="CPF" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="especialidadeConsultorP" id="especialidadeConsultorP" class="form-control" placeholder="Especialidade" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-publicar">Publicar</button>
+          <button class="btn btn-danger" id="btn-cancelar-publicacao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+
+<div class="container" style="display:none" id="container_form_alterar">
+      <div class="panel panel-default">
+
+      <div class="panel-heading"><h4>Alterar um Anúncio</h4></div>
+      
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" name="idA" id="idA" class="form-control" placeholder="ID">
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="nomeConsultorA" id="nomeConsultorA" class="form-control" placeholder="Nome">
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="usernameConsultorA" id="usernameConsultorA" class="form-control" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="passwordConsultorA" id="passwordConsultorA" class="form-control" placeholder="Password" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="localizacaoConsultorA" id="localizacaoConsultorA" class="form-control" placeholder="Endereço" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="telefoneConsultorA" id="telefoneConsultorA" class="form-control" placeholder="Telefone" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="celularConsultorA" id="celularConsultorA" class="form-control" placeholder="CELULAR" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="emailConsultorA" id="emailConsultorA" class="form-control" placeholder="EMAIL" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="fotoConsultorA" id="fotoConsultorA" class="form-control" placeholder="FOTO" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="rgConsultorA" id="rgConsultorA" class="form-control" placeholder="RG" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="cpfConsultorA" id="cpfConsultorA" class="form-control" placeholder="CPF" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <input type="text" name="especialidadeConsultorA" id="especialidadeConsultorA" class="form-control" placeholder="Especialidade" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="btn-alterar-anuncio">Alterar</button>
+          <button class="btn btn-danger" id="btn-cancelar-alteracao">Cancelar</button>
+        </div>
+        <div id="mensagem"></div>
+      </div>
+    </div>
+</div>
+
+  </body>
+</html>
