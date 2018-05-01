@@ -35,16 +35,18 @@ consign()
 	.into(app);
 
 /* middleware que configura páginas de status */
-/*app.use(function(req, res, next){
+app.use(function(req, res, next){
 	res.status(404).render('errors/404');
+	console.log(res);
 	next();
-});*/
+});
 
 /* middleware que configura msgs de erro internos */
-/*app.use(function(err, req, res, next){
+app.use(function(err, req, res, next){
 	res.status(500).render('errors/500');
+	console.log(res);
 	next();
-});*/
+});
 
 /* exportar o objeto app */
 module.exports = app;
