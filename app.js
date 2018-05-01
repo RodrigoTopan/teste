@@ -2,7 +2,6 @@
 var app = require('./config/server');
 
 /* parametrizar a porta de escuta */
-var port = process.env.PORT; 
-app.listen(port, function(){
+app.listen(process.env.PORT, function(){
 	console.log('Servidor online');
 })
