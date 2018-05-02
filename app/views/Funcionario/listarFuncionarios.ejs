@@ -2,13 +2,20 @@
 <html>
 <head>
    <!-- bootstrap - link cdn -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- incluindo css --> 
   <title>Listagem de Funcionarios</title>
   <meta charset="UTF-8">
-      <!-- JQuery -->
-    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
-    <script type="text/javascript">
+
+    <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <!-- bootstrap - link cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script>
+
           $(document).ready(function(){
 
             function carrega_postagens(){
@@ -66,6 +73,7 @@
                   if(xhr.status === 200){
                     console.log('apagado');
                   }
+                  window.location.reload();
                 }
 
                 xhr.send();
@@ -93,16 +101,16 @@
         
         $('#btn-publicar').click(function(){ 
         const params = {
-            nome: document.querySelector('#nomeFuncionario').value || 'nomeFuncionario',
-            username: document.querySelector('#loginFuncionario').value || 'loginFuncionario',
-            password: document.querySelector('#senhaFuncionario').value || 'senhaFuncionario',
-            localizacao: document.querySelector('#endereço').value || 'endereço',
-            telefone: document.querySelector('#telefone').value || 'telefone',
-            celular: document.querySelector('#celular').value || 'celular',
-            email: document.querySelector('#email').value || 'email',
-            foto: document.querySelector('#myFileprof').value || 'myFileprof',
-            RG: document.querySelector('#RG').value || 'RG',
-            CPF: document.querySelector('#CPF').value || 'CPF'
+            nome: document.querySelector('#nomeFuncionario').value,
+            username: document.querySelector('#loginFuncionario').value,
+            password: document.querySelector('#senhaFuncionario').value,
+            localizacao: document.querySelector('#endereço').value,
+            telefone: document.querySelector('#telefone').value,
+            celular: document.querySelector('#celular').value,
+            email: document.querySelector('#email').value,
+            foto: document.querySelector('#myFileprof').value,
+            RG: document.querySelector('#RG').value,
+            CPF: document.querySelector('#CPF').value
           }    
          var xhr = new XMLHttpRequest();
              xhr.open("POST", "https://amigocat.herokuapp.com/funcionario", true);
@@ -116,22 +124,23 @@
                     var data = $.parseJSON(xhr.responseText);
                     console.log(data);
                  }
+                 window.location.reload();
               }        
         });
 
         $('#btn-alterar-anuncio').click(function(){ 
-        const id = document.querySelector('#idFuncionarioA').value || '1';
+        const id = document.querySelector('#idFuncionarioA').value;
         const params = {
-            nome: document.querySelector('#nomeFuncionarioA').value || 'nomeFuncionarioA',
-            username: document.querySelector('#loginFuncionarioA').value || 'loginFuncionarioA',
-            password: document.querySelector('#senhaFuncionarioA').value || 'senhaFuncionarioA',
-            localizacao: document.querySelector('#endereçoA').value || 'endereçoA',
-            telefone: document.querySelector('#telefoneA').value || 'telefoneA',
-            celular: document.querySelector('#celularA').value || 'celularA',
-            email: document.querySelector('#emailA').value || 'emailA',
-            foto: document.querySelector('#myFileprofA').value || 'myFileprofA',
-            RG: document.querySelector('#RGA').value || 'RGA',
-            CPF: document.querySelector('#CPFA').value || 'CPFA'
+            nome: document.querySelector('#nomeFuncionarioA').value,
+            username: document.querySelector('#loginFuncionarioA').value,
+            password: document.querySelector('#senhaFuncionarioA').value,
+            localizacao: document.querySelector('#endereçoA').value,
+            telefone: document.querySelector('#telefoneA').value,
+            celular: document.querySelector('#celularA').value,
+            email: document.querySelector('#emailA').value,
+            foto: document.querySelector('#myFileprofA').value,
+            RG: document.querySelector('#RGA').value,
+            CPF: document.querySelector('#CPFA').value
           }   
          var xhr = new XMLHttpRequest();
              xhr.open("PUT", "https://amigocat.herokuapp.com/funcionario/"+id);
@@ -145,6 +154,7 @@
                     var data = $.parseJSON(xhr.responseText);
                     console.log(data);
                  }
+                 window.location.reload();
               }        
         });
     
@@ -155,6 +165,50 @@
     </script>
 </head>
 <body style="background-color: #dedede;">
+
+
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/home">AMIGOCAT - PAINEL ADMINISTRATIVO </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/usuario">Cadastrar Usuário</a></li>
+            <li><a class="dropdown-item" href="/usuario">Cadastrar Funcionário</a></li>
+            <li><a class="dropdown-item" href="/consultor">Cadastrar Consultor</a></li>
+            <li><a class="dropdown-item" href="/agricultor">Cadastrar Agricultor</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/anuncio">Cadastrar Anúncio</a></li>
+            <li><a class="dropdown-item" href="/produto">Cadastrar Produto</a></li>
+            <li><a class="dropdown-item" href="/chamado">Cadastrar Chamado</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listagens<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/usuario">Listar Usuários</a></li>
+            <li><a class="dropdown-item" href="/funcionario">Listar Funcionários</a></li>
+            <li><a class="dropdown-item" href="/consultor">Listar Consultores</a></li>
+            <li><a class="dropdown-item" href="/agricultor">Listar Agricultores</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/anuncio">Listar Anúncios</a></li>
+            <li><a class="dropdown-item" href="/produto">Listar Produtos</a></li>
+            <li><a class="dropdown-item" href="/chamado">Listar Chamados</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
     <nav class="navbar navbar-default">
       <div class="container">

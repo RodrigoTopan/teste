@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <!-- bootstrap - link cdn -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- incluindo css -->
-  <link href="../../public/css/style.css" rel="stylesheet">  
   <title>Listagem de Chamados</title>
   <meta charset="UTF-8">
-      <!-- JQuery -->
-    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
+   <!-- bootstrap - link cdn -->
+    <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <!-- bootstrap - link cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
       <script>
       $(document).ready(function(){
 
@@ -63,6 +66,7 @@
                   if(xhr.status === 200){
                     console.log('apagado');
                   }
+                  window.location.reload();
                 }
 
                 xhr.send();
@@ -109,18 +113,19 @@
                     var data = $.parseJSON(xhr.responseText);
                     console.log(data);
                  }
+                 window.location.reload();
               }        
         });
 
         $('#btn-alterar-anuncio').click(function(){ 
-        const id = document.querySelector('#idChamadoA').value || '1';
+        const id = document.querySelector('#idChamadoA').value;
          const params = {
-            titulo: document.querySelector('#tituloChamadoA').value || 'titulo',
-            foto: document.querySelector('#fotoChamadoA').value || 'foto',
-            descricao: document.querySelector('#descricaoChamadoA').value || 'descricao',
-            dataInicio: document.querySelector('#dataInicioChamadoA').value || 'dataInicio',
-            dataFim: document.querySelector('#dataFimChamadoA').value || 'dataFim',
-            status: document.querySelector('#statusChamadoA').value || 'Status'
+            titulo: document.querySelector('#tituloChamadoA').value,
+            foto: document.querySelector('#fotoChamadoA').value,
+            descricao: document.querySelector('#descricaoChamadoA').value,
+            dataInicio: document.querySelector('#dataInicioChamadoA').value,
+            dataFim: document.querySelector('#dataFimChamadoA').value,
+            status: document.querySelector('#statusChamadoA').value
           }   
          var xhr = new XMLHttpRequest();
              xhr.open("PUT", "https://amigocat.herokuapp.com/chamado/"+id);
@@ -134,6 +139,7 @@
                     var data = $.parseJSON(xhr.responseText);
                     console.log(data);
                  }
+                window.location.reload();
               }        
         });
     
@@ -145,6 +151,50 @@
   
 </head>
 <body style="background-color: #dedede;">
+
+  
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/home">AMIGOCAT - PAINEL ADMINISTRATIVO </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/usuario">Cadastrar Usuário</a></li>
+            <li><a class="dropdown-item" href="/usuario">Cadastrar Funcionário</a></li>
+            <li><a class="dropdown-item" href="/consultor">Cadastrar Consultor</a></li>
+            <li><a class="dropdown-item" href="/agricultor">Cadastrar Agricultor</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/anuncio">Cadastrar Anúncio</a></li>
+            <li><a class="dropdown-item" href="/produto">Cadastrar Produto</a></li>
+            <li><a class="dropdown-item" href="/chamado">Cadastrar Chamado</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listagens<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/usuario">Listar Usuários</a></li>
+            <li><a class="dropdown-item" href="/funcionario">Listar Funcionários</a></li>
+            <li><a class="dropdown-item" href="/consultor">Listar Consultores</a></li>
+            <li><a class="dropdown-item" href="/agricultor">Listar Agricultores</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/anuncio">Listar Anúncios</a></li>
+            <li><a class="dropdown-item" href="/produto">Listar Produtos</a></li>
+            <li><a class="dropdown-item" href="/chamado">Listar Chamados</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
     <nav class="navbar navbar-default">
       <div class="container">
@@ -196,7 +246,7 @@
 <div class="container" style="display:none" id="container_form_alterar">
       <div class="panel panel-default">
 
-      <div class="panel-heading"><h4>Alterar um Anúncio</h4></div>
+      <div class="panel-heading"><h4>Alterar um Chamado</h4></div>
       
       <div class="panel-body">
         <div class="form-group">

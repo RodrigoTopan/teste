@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <!-- bootstrap - link cdn -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- incluindo css -->
-  <link href="../../public/css/style.css" rel="stylesheet">  
+
   <title>Listagem de Produtos</title>
   <meta charset="UTF-8">
-      <!-- JQuery -->
-    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script> 
-  
+
+    <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <!-- bootstrap - link cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
  <script>
       $(document).ready(function(){
@@ -64,6 +67,7 @@
                   if(xhr.status === 200){
                     console.log('apagado');
                   }
+                  window.location.reload();
                 }
 
                 xhr.send();
@@ -92,11 +96,11 @@
         $('#btn-publicar').click(function(){ 
           
         const params = {
-            nome: document.querySelector('#nomeP').value || 'nome',
-            tipo: document.querySelector('#tipoP').value || 'tipo',
-            duracao: document.querySelector('#duracaoP').value || 'duracao',
-            valorMin: document.querySelector('#valorMinP').value || 'valorMin',
-            valorMax: document.querySelector('#valorMaxP').value || 'valorMax'
+            nome: document.querySelector('#nomeP').value,
+            tipo: document.querySelector('#tipoP').value,
+            duracao: document.querySelector('#duracaoP').value,
+            valorMin: document.querySelector('#valorMinP').value,
+            valorMax: document.querySelector('#valorMaxP').value
           }   
          var xhr = new XMLHttpRequest();
              xhr.open("POST", "https://amigocat.herokuapp.com/produto", true);
@@ -110,17 +114,18 @@
                     var data = $.parseJSON(xhr.responseText);
                     console.log(data);
                  }
+                 window.location.reload();
               }        
         });
 
         $('#btn-alterar-anuncio').click(function(){ 
-        const id = document.querySelector('#idA').value || '1';
+        const id = document.querySelector('#idA').value;
         const params = {
-            nome: document.querySelector('#nomeA').value || 'nome',
-            tipo: document.querySelector('#tipoA').value || 'tipo',
-            duracao: document.querySelector('#duracaoA').value || 'duracao',
-            valorMin: document.querySelector('#valorMinA').value || 'valorMin',
-            valorMax: document.querySelector('#valorMaxA').value || 'valorMax'
+            nome: document.querySelector('#nomeA').value,
+            tipo: document.querySelector('#tipoA').value,
+            duracao: document.querySelector('#duracaoA').value,
+            valorMin: document.querySelector('#valorMinA').value,
+            valorMax: document.querySelector('#valorMaxA').value
           }   
          var xhr = new XMLHttpRequest();
              xhr.open("PUT", "https://amigocat.herokuapp.com/produto/"+id);
@@ -133,6 +138,7 @@
                  if(xhr.status === 200){
                     var data = $.parseJSON(xhr.responseText);
                     console.log(data);
+                    window.location.reload();
                  }
               }        
         });
@@ -147,6 +153,50 @@
 
 </head>
 <body style="background-color: #dedede;">
+
+
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/home">AMIGOCAT - PAINEL ADMINISTRATIVO </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/usuario">Cadastrar Usuário</a></li>
+            <li><a class="dropdown-item" href="/usuario">Cadastrar Funcionário</a></li>
+            <li><a class="dropdown-item" href="/consultor">Cadastrar Consultor</a></li>
+            <li><a class="dropdown-item" href="/agricultor">Cadastrar Agricultor</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/anuncio">Cadastrar Anúncio</a></li>
+            <li><a class="dropdown-item" href="/produto">Cadastrar Produto</a></li>
+            <li><a class="dropdown-item" href="/chamado">Cadastrar Chamado</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listagens<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/usuario">Listar Usuários</a></li>
+            <li><a class="dropdown-item" href="/funcionario">Listar Funcionários</a></li>
+            <li><a class="dropdown-item" href="/consultor">Listar Consultores</a></li>
+            <li><a class="dropdown-item" href="/agricultor">Listar Agricultores</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/anuncio">Listar Anúncios</a></li>
+            <li><a class="dropdown-item" href="/produto">Listar Produtos</a></li>
+            <li><a class="dropdown-item" href="/chamado">Listar Chamados</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
     <nav class="navbar navbar-default">
       <div class="container">
