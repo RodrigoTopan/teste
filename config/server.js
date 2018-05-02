@@ -15,7 +15,7 @@ var app = express();
 
 /* setar as variáveis 'view engine' e 'views' do express */
 app.set('view engine', 'ejs');
-app.set('views', './app/views');
+app.set('views', '../app/views');
 
 /* configurar o middleware express.static */
 app.use(express.static('./app/public'));
@@ -47,16 +47,16 @@ consign()
 	.into(app);
 
 /* middleware que configura páginas de status */
-/*app.use(function(req, res, next){
+app.use(function(req, res, next){
 	res.status(404).render('errors/404');
 	next();
-});*/
+});
 
 /* middleware que configura msgs de erro internos */
-/*app.use(function(err, req, res, next){
+app.use(function(err, req, res, next){
 	res.status(500).render('errors/500');
 	next();
-});*/
+});
 
 /* exportar o objeto app */
 module.exports = app;
